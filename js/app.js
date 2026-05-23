@@ -1,14 +1,7 @@
-// ============================================================
-// ESTADO DE LA APP
-// ============================================================
-
 let colorCount = 6;
 let activeFormat = 'hex';
 
-// ============================================================
 // GENERACIÓN DE COLORES
-// ============================================================
-
 const generateHexChannel = (value) => {
     return value.toString(16).padStart(2, '0');
 };
@@ -72,10 +65,7 @@ const generatePalette = (count) => {
     return palette;
 };
 
-// ============================================================
 // REFERENCIAS AL DOM
-// ============================================================
-
 const generateBtn = document.getElementById('btn-generate');
 const paletteContainer = document.getElementById('palette-container');
 const formatMessage = document.getElementById('active-format');
@@ -86,10 +76,7 @@ const sizeToast = document.getElementById('toast-size');
 const sizeButtons = document.querySelectorAll('.size-btn');
 const formatRadios = document.querySelectorAll('input[name="format"]');
 
-// ============================================================
 // FUNCIONES DE UI
-// ============================================================
-
 const showToast = (toastElement, text) => {
     if (text) {
         toastElement.textContent = text;
@@ -132,10 +119,7 @@ const renderPalette = (colors) => {
     });
 };
 
-// ============================================================
 // EVENTOS
-// ============================================================
-
 generateBtn.addEventListener('click', () => {
     const palette = generatePalette(colorCount);
     renderPalette(palette);
