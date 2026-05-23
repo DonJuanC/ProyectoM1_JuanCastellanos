@@ -1,0 +1,211 @@
+/* RESET UNIVERSAL */
+*, *::before, *::after {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+/* VARIABLES */
+:root {
+    --color-fondo: #0f0f13;
+    --color-superficie: #1a1a24;
+    --color-borde: #2e2e3e;
+    --color-acento: #e0ff4f;
+    --color-texto: #f0f0f0;
+    --color-texto-secundario: #888;
+    --radio-borde: 8px;
+    --fuente-principal: system-ui, sans-serif;
+}
+
+/* BASE */
+body {
+    font-family: var(--fuente-principal);
+    background-color: var(--color-fondo);
+    color: var(--color-texto);
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+}
+
+/* HEADER */
+.site-header {
+    padding: 1.5rem 2rem;
+    border-bottom: 1px solid var(--color-borde);
+}
+
+.site-title {
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: var(--color-texto);
+}
+
+.site-subtitle {
+    font-size: 0.875rem;
+    color: var(--color-texto-secundario);
+    margin-top: 0.25rem;
+}
+
+/* MAIN */
+.main-content {
+    flex: 1;
+    padding: 2rem;
+    max-width: 1100px;
+    width: 100%;
+    margin: 0 auto;
+}
+
+/* CONTROLES */
+.controls {
+    display: flex;
+    flex-direction: row;
+    align-items: flex-end;
+    flex-wrap: wrap;
+    gap: 1.5rem;
+    margin-bottom: 1.5rem;
+    padding: 1.5rem;
+    background-color: var(--color-superficie);
+    border-radius: var(--radio-borde);
+    border: 1px solid var(--color-borde);
+}
+
+.control-group {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+.control-label {
+    font-size: 0.75rem;
+    color: var(--color-texto-secundario);
+}
+
+/* SELECTOR DE TAMAÑO */
+.size-selector {
+    display: flex;
+    flex-direction: row;
+}
+
+.size-btn {
+    padding: 0.5rem 1rem;
+    background-color: transparent;
+    color: var(--color-texto-secundario);
+    border: 1px solid var(--color-borde);
+    cursor: pointer;
+    font-size: 0.875rem;
+}
+
+.size-btn:not(:first-child) {
+    border-left: none;
+}
+
+.size-btn:first-child {
+    border-radius: var(--radio-borde) 0 0 var(--radio-borde);
+}
+
+.size-btn:last-child {
+    border-radius: 0 var(--radio-borde) var(--radio-borde) 0;
+}
+
+.size-btn.active {
+    background-color: var(--color-acento);
+    color: #0f0f13;
+    border-color: var(--color-acento);
+    font-weight: 600;
+}
+
+/* SELECTOR DE FORMATO */
+.format-selector {
+    display: flex;
+    gap: 0.5rem;
+}
+
+.format-selector label {
+    display: flex;
+    align-items: center;
+    gap: 0.375rem;
+    padding: 0.5rem 1rem;
+    border: 1px solid var(--color-borde);
+    border-radius: var(--radio-borde);
+    cursor: pointer;
+    font-size: 0.875rem;
+    color: var(--color-texto-secundario);
+}
+
+.format-selector label:has(input:checked) {
+    background-color: var(--color-acento);
+    color: #0f0f13;
+    border-color: var(--color-acento);
+    font-weight: 600;
+}
+
+.format-selector input[type="radio"] {
+    display: none;
+}
+
+/* BOTÓN PRINCIPAL */
+.btn-generate {
+    padding: 0.625rem 1.75rem;
+    background-color: var(--color-acento);
+    color: #0f0f13;
+    border: none;
+    border-radius: var(--radio-borde);
+    font-size: 1rem;
+    font-weight: 600;
+    cursor: pointer;
+}
+
+/* FORMATO ACTIVO */
+.active-format {
+    font-size: 0.75rem;
+    color: var(--color-texto-secundario);
+    margin-bottom: 1rem;
+    min-height: 1rem;
+}
+
+/* GRID DE SWATCHES */
+.palette-container {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
+    gap: 1rem;
+}
+
+.swatch {
+    border-radius: var(--radio-borde);
+    overflow: hidden;
+    border: 1px solid var(--color-borde);
+    cursor: pointer;
+}
+
+.swatch-color {
+    height: 100px;
+}
+
+.swatch-footer {
+    background-color: var(--color-superficie);
+    padding: 0.5rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.swatch-codes {
+    display: flex;
+    flex-direction: column;
+    gap: 0.125rem;
+}
+
+.swatch-hex {
+    font-size: 0.75rem;
+    font-family: monospace;
+    color: var(--color-texto);
+}
+
+.swatch-hsl {
+    font-size: 0.65rem;
+    font-family: monospace;
+    color: var(--color-texto-secundario);
+}
+
+.swatch-copy-icon {
+    font-size: 0.75rem;
+    color: var(--color-texto-secundari
