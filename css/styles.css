@@ -255,7 +255,24 @@ body {
     border: 1px solid var(--color-borde);
 }
 
-/* FOOTER */
+.size-btn:hover:not(.active) {
+    background-color: var(--color-borde);
+    color: var(--color-texto);
+}
+
+.btn-generate:hover {
+    opacity: 0.85;
+}
+
+.swatch:hover {
+    transform: translateY(-4px);
+}
+
+.format-selector label:hover:not(:has(input:checked)) {
+    background-color: var(--color-borde);
+    color: var(--color-texto);
+}
+
 .site-footer {
     margin-top: auto;
     padding: 1.5rem 2rem;
