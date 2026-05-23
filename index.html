@@ -1,26 +1,73 @@
 <!DOCTYPE html>
 <html lang="es">
 
-  <head>
+<head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Colorfly Studio</title>
     <link rel="stylesheet" href="css/styles.css" />
-  </head>
+</head>
 
-  <body>
+<body>
 
     <header class="site-header">
+        <h1 class="site-title">🎨 Colorfly Studio</h1>
+        <p class="site-subtitle">Generador de paletas para equipos creativos</p>
     </header>
 
     <main class="main-content">
+
+        <section class="controls" aria-label="Opciones de generación">
+
+            <div class="control-group">
+                <p class="control-label">Tamaño de paleta</p>
+                <div class="size-selector">
+                    <button type="button" class="size-btn active" data-size="6">6</button>
+                    <button type="button" class="size-btn" data-size="8">8</button>
+                    <button type="button" class="size-btn" data-size="9">9</button>
+                </div>
+            </div>
+
+            <div class="control-group">
+                <p class="control-label">Formato</p>
+                <div class="format-selector">
+                    <label>
+                        <input type="radio" name="format" value="hex" checked /> HEX
+                    </label>
+                    <label>
+                        <input type="radio" name="format" value="hsl" /> HSL
+                    </label>
+                </div>
+            </div>
+
+            <button type="button" class="btn-generate" id="btn-generate" aria-label="Generar nueva paleta de colores">
+                Generar paleta
+            </button>
+
+        </section>
+
+        <div class="active-format" id="active-format"></div>
+
+        <section class="palette-container" id="palette-container" aria-label="Paleta generada" aria-live="polite">
+        </section>
+
+        <div class="toast" id="toast-copy" role="status" aria-live="polite">
+            ✓ Color copiado 
+        </div>
+        <div class="toast" id="toast-generate" role="status" aria-live="polite">
+            🎨 Paleta generada
+        </div>
+        <div class="toast" id="toast-format" role="status" aria-live="polite"></div>
+        <div class="toast" id="toast-size" role="status" aria-live="polite"></div>
+
     </main>
 
     <footer class="site-footer">
+        <p>Colorfly Studio · Proyecto Integrador M1 · Henry Full Stack</p>
     </footer>
 
     <script src="js/app.js"></script>
 
-  </body>
+</body>
 
 </html>
