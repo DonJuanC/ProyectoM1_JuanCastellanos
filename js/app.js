@@ -1,5 +1,6 @@
 let colorCount = 6;
 let activeFormat = 'hex';
+let lockedColors = [];
 
 // GENERACIÓN DE COLORES
 const generateHexChannel = (value) => {
@@ -58,8 +59,14 @@ const generateColor = () => {
 const generatePalette = (count) => {
     const palette = [];
 
-    for (let i = 0; i < count; i++) {
-        palette.push(generateColor());
+    for (let i = 0; i < count; i++) { // Extra
+        if (lockedColors[i]) {
+            palette.push(lockedColors[i]);
+            // Si hay color bloqueado en esta posición lo reutiliza
+        } else {
+            palette.push(generateColor());
+            // Si no, genera uno nuevo
+        }
     }
 
     return palette;
@@ -75,6 +82,9 @@ const formatToast = document.getElementById('toast-format');
 const sizeToast = document.getElementById('toast-size');
 const sizeButtons = document.querySelectorAll('.size-btn');
 const formatRadios = document.querySelectorAll('input[name="format"]');
+// Extra
+const lockToast = document.getElementById('toast-lock');
+const usageHint = document.querySelector('.usage-hint');
 
 // FUNCIONES DE UI
 const showToast = (toastElement, text) => {
@@ -99,9 +109,17 @@ const renderPalette = (colors) => {
 
     formatMessage.textContent = `Paleta generada en formato ${activeFormat.toUpperCase()}`;
 
-    colors.forEach((colorObj) => {
+    usageHint.style.display = 'block';
+    usageHint.textContent = 'Clic en un color para bloquearlo · Clic en 📋 para copiarlo';
+    // Muestra el hint después de la primera generación
+
+    colors.forEach((colorObj, index) => {
         const swatch = document.createElement('div');
         swatch.classList.add('swatch');
+
+        if (lockedColors[index]) {
+            swatch.classList.add('locked');
+        }
 
         swatch.innerHTML = `
             <div class="swatch-color" style="background-color: ${colorObj.value};"></div>
@@ -110,22 +128,51 @@ const renderPalette = (colors) => {
                     <span class="swatch-hex">${colorObj.hex}</span>
                     ${colorObj.hsl ? `<span class="swatch-hsl">${colorObj.hsl}</span>` : ''}
                 </div>
-                <span class="swatch-copy-icon" title="Copiar color">📋</span>
+                <span class="swatch-copy-icon" title="Copiar color">
+                    ${lockedColors[index] ? '🔒' : '📋'}
+                </span>
             </div>
         `;
 
-        swatch.addEventListener('click', () => copyColor(colorObj));
-        paletteContainer.appendChild(swatch);
+        // Clic en el swatch — bloquea o desbloquea
+        swatch.addEventListener('click', (event) => {
+            if (event.target.classList.contains('swatch-copy-icon')) {
+                return;
+                // Si el clic fue en el ícono, no bloquea
+            }
 
-        // Cuando el mouse entra al swatch, cambia el color del título
-        swatch.addEventListener('mouseover', () => {
-        document.querySelector('.site-title').style.color = colorObj.hex;
+            if (lockedColors[index]) {
+                lockedColors[index] = null;
+                swatch.classList.remove('locked');
+                swatch.querySelector('.swatch-copy-icon').textContent = '📋';
+                showToast(lockToast, '🔓 Color desbloqueado');
+            } else {
+                lockedColors[index] = colorObj;
+                swatch.classList.add('locked');
+                swatch.querySelector('.swatch-copy-icon').textContent = '🔒';
+                showToast(lockToast, '🔒 Color bloqueado');
+            }
         });
 
-        // Cuando el mouse sale del swatch, vuelve al color original
+        // Clic en el ícono — copia el color
+        swatch.querySelector('.swatch-copy-icon').addEventListener('click', (event) => {
+            event.stopPropagation();
+            // Evita que el clic suba al swatch y también bloquee
+
+            if (!lockedColors[index]) {
+                copyColor(colorObj);
+            }
+        });
+
+        swatch.addEventListener('mouseover', () => {
+            document.querySelector('.site-title').style.color = colorObj.hex;
+        });
+
         swatch.addEventListener('mouseout', () => {
-    document.querySelector('.site-title').style.color = '';
-    });
+            document.querySelector('.site-title').style.color = '';
+        });
+
+        paletteContainer.appendChild(swatch);
     });
 };
 

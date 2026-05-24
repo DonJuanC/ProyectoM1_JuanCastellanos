@@ -250,7 +250,12 @@ body {
     cursor: pointer;
 }
 
-/* TOASTS */
+/* Extra */
+.swatch.locked {
+    border: 2px solid var(--color-acento);
+}
+
+/* TOASTS Y HINTS */
 .toast {
     display: none;
     position: fixed;
@@ -291,6 +296,21 @@ body {
     background-color: var(--color-superficie);
     color: var(--color-texto);
     border: 1px solid var(--color-borde);
+}
+
+/* Extra */
+#toast-lock {
+    bottom: 14rem;
+    background-color: var(--color-superficie);
+    color: var(--color-texto);
+    border: 1px solid var(--color-borde);
+}
+
+.usage-hint { /* Extra */
+    font-size: 0.75rem;
+    color: var(--color-texto-secundario);
+    margin-bottom: 1rem;
+    display: none; /* oculto por defecto */
 }
 
 .size-btn:hover:not(.active) {
