@@ -344,6 +344,103 @@ body {
     outline-offset: 2px;
 }
 
+/* EXTRA - BARRA DE GUARDAR */
+.save-bar {
+    display: flex;
+    justify-content: center;
+    margin-top: -0.75rem;
+    margin-bottom: 1.5rem;
+}
+
+.btn-save {
+    padding: 0.5rem 1.75rem;
+    background-color: var(--color-superficie);
+    color: var(--color-texto-secundario);
+    border: 1px solid var(--color-borde);
+    border-radius: 0 0 var(--radio-borde) var(--radio-borde);
+    font-size: 0.875rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background-color 0.2s ease, color 0.2s ease;
+}
+
+.btn-save:hover {
+    background-color: var(--color-borde);
+    color: var(--color-texto);
+}
+
+/* EXTRA - SECCIÓN DE PALETAS GUARDADAS */
+.saved-section {
+    margin-top: 3rem;
+    padding: 0 2rem;
+}
+
+.saved-title {
+    font-size: 0.875rem;
+    color: var(--color-texto-secundario);
+    margin-bottom: 1.5rem;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+}
+
+.saved-container {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+}
+
+/* Cada paleta guardada */
+.saved-palette {
+    border: 1px solid var(--color-borde);
+    border-radius: var(--radio-borde);
+    overflow: hidden;
+}
+
+.saved-palette-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0.5rem 1rem;
+    background-color: var(--color-superficie);
+}
+
+.saved-palette-date {
+    font-size: 0.75rem;
+    color: var(--color-texto-secundario);
+}
+
+.btn-delete {
+    background: transparent;
+    border: none;
+    color: var(--color-texto-secundario);
+    cursor: pointer;
+    font-size: 0.75rem;
+    padding: 0.25rem 0.5rem;
+    border-radius: var(--radio-borde);
+    transition: color 0.2s ease;
+}
+
+.btn-delete:hover {
+    color: #ff6b6b;
+}
+
+.saved-palette-colors {
+    display: flex;
+}
+
+.saved-swatch {
+    flex: 1;
+    height: 60px;
+}
+
+/* Toast de guardar */
+#toast-save {
+    bottom: 17rem;
+    background-color: var(--color-superficie);
+    color: var(--color-texto);
+    border: 1px solid var(--color-borde);
+}
+
 .site-footer {
     margin-top: auto;
     padding: 1.5rem 2rem;
