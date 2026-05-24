@@ -51,11 +51,24 @@
 
         </section>
 
+        <!-- Extra: botón guardar paleta — visible solo después de generar -->
+        <div class="save-bar" id="save-bar" style="display: none;">
+    <button type="button" class="btn-save" id="btn-save" title="Guardar paleta actual">
+        💾 Guardar paleta
+    </button>
+        </div>
+
         <p class="usage-hint"></p>
 
         <div class="active-format" id="active-format"></div>
 
         <section class="palette-container" id="palette-container" aria-label="Paleta generada" aria-live="polite">
+        </section>
+
+        <!-- Extra: paletas guardadas -->
+        <section class="saved-section" id="saved-section" style="display: none;" aria-label="Paletas guardadas">
+        <h2 class="saved-title">Paletas guardadas</h2>
+        <div class="saved-container" id="saved-container"></div>
         </section>
 
         <div class="toast" id="toast-copy" role="status" aria-live="polite">
@@ -67,7 +80,7 @@
         <div class="toast" id="toast-format" role="status" aria-live="polite"></div>
         <div class="toast" id="toast-size" role="status" aria-live="polite"></div>
         <div class="toast" id="toast-lock" role="status" aria-live="polite"></div>
-
+        <div class="toast" id="toast-save" role="status" aria-live="polite"></div> <!-- Extra - Guardar -->
 
     </main>
 

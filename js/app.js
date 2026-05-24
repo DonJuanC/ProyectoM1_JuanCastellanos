@@ -82,9 +82,15 @@ const formatToast = document.getElementById('toast-format');
 const sizeToast = document.getElementById('toast-size');
 const sizeButtons = document.querySelectorAll('.size-btn');
 const formatRadios = document.querySelectorAll('input[name="format"]');
-// Extra
+// Extra - bloquear
 const lockToast = document.getElementById('toast-lock');
 const usageHint = document.querySelector('.usage-hint');
+// Extra - guardar
+const saveBar = document.getElementById('save-bar');
+const btnSave = document.getElementById('btn-save');
+const savedSection = document.getElementById('saved-section');
+const savedContainer = document.getElementById('saved-container');
+const saveToast = document.getElementById('toast-save');
 
 // FUNCIONES DE UI
 const showToast = (toastElement, text) => {
@@ -176,11 +182,97 @@ const renderPalette = (colors) => {
     });
 };
 
+// Extra
+// Carga las paletas guardadas desde localStorage
+const loadSavedPalettes = () => {
+    const saved = localStorage.getItem('savedPalettes');
+    return saved ? JSON.parse(saved) : [];
+};
+
+// Guarda las paletas en localStorage
+const savePalettes = (palettes) => {
+    localStorage.setItem('savedPalettes', JSON.stringify(palettes));
+};
+
+// Renderiza las paletas guardadas en pantalla
+const renderSavedPalettes = () => {
+    const palettes = loadSavedPalettes();
+
+    if (palettes.length === 0) {
+        savedSection.style.display = 'none';
+        return;
+    }
+
+    savedSection.style.display = 'block';
+    savedContainer.innerHTML = '';
+
+    palettes.forEach((palette, paletteIndex) => {
+        const paletteEl = document.createElement('div');
+        paletteEl.classList.add('saved-palette');
+
+        const colorsHTML = palette.colors.map(colorObj => `
+            <div class="saved-swatch" style="background-color: ${colorObj.value};" title="${colorObj.hex}"></div>
+        `).join('');
+
+        paletteEl.innerHTML = `
+            <div class="saved-palette-header">
+                <span class="saved-palette-date">${palette.date} · ${palette.colors.length} colores · ${palette.format.toUpperCase()}</span>
+                <button type="button" class="btn-delete" data-index="${paletteIndex}" title="Eliminar paleta">✕</button>
+            </div>
+            <div class="saved-palette-colors">
+                ${colorsHTML}
+            </div>
+        `;
+
+        // Eliminar paleta
+        paletteEl.querySelector('.btn-delete').addEventListener('click', (event) => {
+            const index = Number(event.target.dataset.index);
+            const palettes = loadSavedPalettes();
+            palettes.splice(index, 1);
+            // splice elimina un elemento del array por índice
+            savePalettes(palettes);
+            renderSavedPalettes();
+            showToast(saveToast, '🗑 Paleta eliminada');
+        });
+
+        savedContainer.appendChild(paletteEl);
+    });
+};
+
+// Extra - Guarda la paleta actual
+const saveCurrentPalette = (colors) => {
+    const palettes = loadSavedPalettes();
+
+    const newPalette = {
+        colors: colors,
+        format: activeFormat,
+        date: new Date().toLocaleDateString('es-CO', {
+            day: '2-digit',
+            month: '2-digit',
+            year: 'numeric'
+        })
+    };
+
+    palettes.unshift(newPalette);
+    // unshift agrega al inicio del array — la más reciente queda primero
+
+    if (palettes.length > 5) {
+        palettes.pop();
+        // pop elimina el último elemento — la más antigua se borra
+    }
+
+    savePalettes(palettes);
+    renderSavedPalettes();
+    showToast(saveToast, '✓ Paleta guardada');
+};
+
 // EVENTOS
 generateBtn.addEventListener('click', () => {
     const palette = generatePalette(colorCount);
     renderPalette(palette);
     showToast(generateToast);
+    saveBar.style.display = 'flex';
+    // Muestra el botón de guardar después de la primera generación
 });
 
 sizeButtons.forEach((btn) => {
@@ -198,3 +290,12 @@ formatRadios.forEach((radio) => {
         showToast(formatToast, `Formato cambiado a ${activeFormat.toUpperCase()}`);
     });
 });
+
+// Extra - guardar 
+btnSave.addEventListener('click', () => {
+    const palette = generatePalette(colorCount);
+    saveCurrentPalette(palette);
+});
+
+// Extra - carga las paletas guardadas al iniciar la app
+renderSavedPalettes();
