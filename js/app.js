@@ -116,6 +116,16 @@ const renderPalette = (colors) => {
 
         swatch.addEventListener('click', () => copyColor(colorObj));
         paletteContainer.appendChild(swatch);
+
+        // Cuando el mouse entra al swatch, cambia el color del título
+        swatch.addEventListener('mouseover', () => {
+        document.querySelector('.site-title').style.color = colorObj.hex;
+        });
+
+        // Cuando el mouse sale del swatch, vuelve al color original
+        swatch.addEventListener('mouseout', () => {
+    document.querySelector('.site-title').style.color = '';
+    });
     });
 };
 
