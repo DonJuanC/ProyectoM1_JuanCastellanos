@@ -92,6 +92,7 @@ body {
     border: 1px solid var(--color-borde);
     cursor: pointer;
     font-size: 0.875rem;
+    transition: background-color 0.2s ease, color 0.2s ease; /* agrega esta línea */
 }
 
 .size-btn:not(:first-child) {
@@ -129,6 +130,7 @@ body {
     cursor: pointer;
     font-size: 0.875rem;
     color: var(--color-texto-secundario);
+    transition: background-color 0.2s ease, color 0.2s ease;
 }
 
 .format-selector label:has(input:checked) {
@@ -152,6 +154,7 @@ body {
     font-size: 1rem;
     font-weight: 600;
     cursor: pointer;
+    transition: opacity 0.2s ease; /* agrega esta línea */
 }
 
 /* FORMATO ACTIVO */
@@ -174,6 +177,7 @@ body {
     overflow: hidden;
     border: 1px solid var(--color-borde);
     cursor: pointer;
+    transition: transform 0.2s ease; /* agrega esta línea */
 }
 
 .swatch-color {
