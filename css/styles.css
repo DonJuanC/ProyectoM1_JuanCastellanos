@@ -25,6 +25,7 @@ body {
     min-height: 100vh;
     display: flex;
     flex-direction: column;
+    overflow-x: hidden;
 }
 
 /* HEADER */
@@ -208,7 +209,7 @@ body {
 }
 
 .swatch-color {
-    height: 400px; 
+    height: 200px; 
 }
 
 .swatch-hex {
