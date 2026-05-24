@@ -110,7 +110,7 @@ const renderPalette = (colors) => {
                     <span class="swatch-hex">${colorObj.hex}</span>
                     ${colorObj.hsl ? `<span class="swatch-hsl">${colorObj.hsl}</span>` : ''}
                 </div>
-                <span class="swatch-copy-icon">📋</span>
+                <span class="swatch-copy-icon" title="Copiar color">📋</span>
             </div>
         `;
 
