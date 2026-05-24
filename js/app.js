@@ -1,6 +1,7 @@
 let colorCount = 6;
 let activeFormat = 'hex';
 let lockedColors = [];
+let currentPalette = [];
 
 // GENERACIÓN DE COLORES
 const generateHexChannel = (value) => {
@@ -244,7 +245,7 @@ const saveCurrentPalette = (colors) => {
     const palettes = loadSavedPalettes();
 
     const newPalette = {
-        colors: colors,
+        colors: [...colors],
         format: activeFormat,
         date: new Date().toLocaleDateString('es-CO', {
             day: '2-digit',
@@ -268,8 +269,8 @@ const saveCurrentPalette = (colors) => {
 
 // EVENTOS
 generateBtn.addEventListener('click', () => {
-    const palette = generatePalette(colorCount);
-    renderPalette(palette);
+    currentPalette = generatePalette(colorCount);
+    renderPalette(currentPalette);
     showToast(generateToast);
     saveBar.style.display = 'flex';
     // Muestra el botón de guardar después de la primera generación
@@ -284,17 +285,15 @@ sizeButtons.forEach((btn) => {
     });
 });
 
+btnSave.addEventListener('click', () => {
+    saveCurrentPalette(currentPalette);
+});
+
 formatRadios.forEach((radio) => {
     radio.addEventListener('change', () => {
         activeFormat = radio.value;
         showToast(formatToast, `Formato cambiado a ${activeFormat.toUpperCase()}`);
     });
-});
-
-// Extra - guardar 
-btnSave.addEventListener('click', () => {
-    const palette = generatePalette(colorCount);
-    saveCurrentPalette(palette);
 });
 
 // Extra - carga las paletas guardadas al iniciar la app
