@@ -130,7 +130,7 @@ body {
     cursor: pointer;
     font-size: 0.875rem;
     color: var(--color-texto-secundario);
-    transition: background-color 0.2s ease, color 0.2s ease;
+    transition: background-color 0.2s ease, color 0.2s ease;         
 }
 
 .format-selector label:has(input:checked) {
@@ -141,7 +141,10 @@ body {
 }
 
 .format-selector input[type="radio"] {
-    display: none;
+    position: absolute;
+    opacity: 0;
+    width: 0;
+    height: 0;
 }
 
 /* BOTÓN PRINCIPAL */
@@ -275,6 +278,19 @@ body {
 .format-selector label:hover:not(:has(input:checked)) {
     background-color: var(--color-borde);
     color: var(--color-texto);
+}
+
+/* Foco visible — accesibilidad para navegación cuando se navega con teclado */
+.size-btn:focus-visible,
+.btn-generate:focus-visible,
+.swatch:focus-visible {
+    outline: 2px solid var(--color-acento);
+    outline-offset: 2px;
+}
+
+.format-selector label:focus-within {
+    outline: 2px solid var(--color-acento);
+    outline-offset: 2px;
 }
 
 .site-footer {
