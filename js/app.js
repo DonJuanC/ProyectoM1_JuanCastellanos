@@ -59,7 +59,7 @@ const generateColor = () => {
 const generatePalette = (count) => {
     const palette = [];
 
-    for (let i = 0; i < count; i++) { // Extra
+    for (let i = 0; i < count; i++) {
         if (lockedColors[i]) {
             palette.push(lockedColors[i]);
             // Si hay color bloqueado en esta posición lo reutiliza

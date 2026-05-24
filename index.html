@@ -6,6 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Colorfly Studio</title>
     <link rel="stylesheet" href="css/styles.css" />
+    <script src="js/app.js" defer></script>
 </head>
 
 <body>
@@ -52,7 +53,7 @@
         </section>
 
         <!-- Extra: botón guardar paleta — visible solo después de generar -->
-        <div class="save-bar" id="save-bar" style="display: none;">
+        <div class="save-bar" id="save-bar">
             <button type="button" class="btn-save" id="btn-save" title="Guardar paleta actual">
             Guardar paleta
             </button>
@@ -66,7 +67,7 @@
         </section>
 
         <!-- Extra: paletas guardadas -->
-        <section class="saved-section" id="saved-section" style="display: none;" aria-label="Paletas guardadas">
+        <section class="saved-section" id="saved-section";" aria-label="Paletas guardadas">
         <h2 class="saved-title">Paletas guardadas</h2>
         <div class="saved-container" id="saved-container"></div>
         </section>
@@ -87,8 +88,6 @@
     <footer class="site-footer">
         <p>Colorfly Studio · Proyecto Integrador M1 · Henry Full Stack</p>
     </footer>
-
-    <script src="js/app.js" defer></script>
 
 </body>
 

@@ -61,7 +61,7 @@ body {
 .site-subtitle {
     font-size: 0.8rem;
     color: var(--color-texto-secundario);
-    margin-top: rem;
+    margin-top: 0.25rem;
 }
 
 /* MAIN */
@@ -201,22 +201,15 @@ body {
 }
 
 .swatch {
-    border-radius: 0;
+    border-radius: var(--radio-borde);
     overflow: hidden;
-    border: none;
+    border: 1px solid var(--color-borde);
     cursor: pointer;
-    transition: transform 0.2s ease; 
+    transition: transform 0.2s ease;
 }
 
 .swatch-color {
     height: 200px; 
-}
-
-.swatch-hex {
-    font-size: 0.875rem; 
-    font-family: monospace;
-    color: var(--color-texto);
-    font-weight: 600;
 }
 
 .swatch-footer {
@@ -441,6 +434,9 @@ body {
     color: var(--color-texto);
     border: 1px solid var(--color-borde);
 }
+
+.save-bar { display: none; }
+.saved-section { display: none; }
 
 .site-footer {
     margin-top: auto;
