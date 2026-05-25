@@ -186,6 +186,28 @@ const copyColor = (colorObj) => {
 };
 
 /**
+ * Determina el color de texto adecuado según el brillo del color de fondo.
+ * Calcula la luminancia relativa del color para garantizar contraste legible.
+ * Sugerencia de IA — matemática de accesibilidad de color (WCAG).
+ * @param {string} hex - Color en formato hexadecimal '#RRGGBB'.
+ * @returns {string} '#0f0f13' para fondos claros, '#f0f0f0' para fondos oscuros.
+ */
+const getTextColor = (hex) => {
+    const r = parseInt(hex.slice(1, 3), 16);
+    const g = parseInt(hex.slice(3, 5), 16);
+    const b = parseInt(hex.slice(5, 7), 16);
+    // parseInt con base 16 convierte cada par de caracteres HEX a número decimal
+
+    const luminance = (0.299 * r + 0.587 * g + 0.114 * b) / 255;
+    // Fórmula estándar de luminancia — pondera cada canal según cómo el ojo humano
+    // percibe el brillo: el verde se percibe más brillante que el rojo y el azul
+
+    return luminance > 0.5 ? '#0f0f13' : '#f0f0f0';
+    // Si el color es claro → texto oscuro
+    // Si el color es oscuro → texto claro
+};
+
+/**
  * Crea dinámicamente y dibuja las muestras de color (swatches) en el DOM.
  * Asigna eventos de clic para bloquear/desbloquear, copiar códigos y efectos hover sobre el título.
  * @param {array} colors - Array de objetos de color a renderizar.
@@ -203,29 +225,34 @@ const renderPalette = (colors) => {
         const swatch = document.createElement('div');
         swatch.classList.add('swatch');
 
+        const textColor = getTextColor(hex);
+        // Calcula el color de texto adecuado para este swatch
+
         if (lockedColors[index]) {
             swatch.classList.add('locked');
         }
 
     swatch.innerHTML = `
-        <div class="swatch-color" style="background-color: ${value};"></div>
-        <div class="swatch-footer">
-            <div class="swatch-codes">
-                <div class="code-row swatch-copy-hex" title="Copiar HEX">
-                    <span class="swatch-label">HEX</span>
-                    <span class="swatch-hex">${hex}</span>
-                    <span class="copy-indicator">📋</span>
-                </div>
-                <div class="code-row swatch-copy-hsl" title="Copiar HSL">
-                    <span class="swatch-label">HSL</span>
-                    <span class="swatch-hsl">${hsl}</span>
-                    <span class="copy-indicator">📋</span>
-                </div>
+    <div class="swatch-color" style="background-color: ${value};"></div>
+    <div class="swatch-footer" style="color: ${textColor};">
+        <button type="button" class="swatch-lock-btn" title="${lockedColors[index] ? 'Desbloquear color' : 'Bloquear color'}" style="color: ${textColor}; border-color: ${textColor}40;">
+            ${lockedColors[index] ? '🔒' : '🔓'}
+        </button>
+        <div class="swatch-codes">
+            <div class="code-row swatch-copy-hex" title="Copiar HEX">
+                <span class="swatch-label" style="color: ${textColor};">HEX</span>
+                <span class="copy-indicator">📋</span>
             </div>
-            <button type="button" class="swatch-lock-btn" title="${lockedColors[index] ? 'Desbloquear color' : 'Bloquear color'}">
-                ${lockedColors[index] ? '🔒' : '🔓'}
-            </button>
+            <span class="swatch-hex" style="color: ${textColor};">${hex}</span>
+            ${hsl ? `
+            <div class="code-row swatch-copy-hsl" title="Copiar HSL">
+                <span class="swatch-label" style="color: ${textColor};">HSL</span>
+                <span class="copy-indicator">📋</span>
+            </div>
+            <span class="swatch-hsl" style="color: ${textColor};">${hsl}</span>
+            ` : ''}
         </div>
+    </div>
     `;
 
         const lockBtn = swatch.querySelector('.swatch-lock-btn');
