@@ -98,7 +98,13 @@ Cada color que se genera tiene tre spropiedades: `value` (para pintar el fondo),
 - `label` asociado a cada `input radio` — el radio está oculto visualmente pero accesible por teclado con `position: absolute; opacity: 0`
 - Foco visible con `outline` de color acento para navegación con teclado
 - Contraste suficiente entre texto y fondo
-- Atributo `title` en íconos para tooltips nativos del navegador
+- Atributo `title` en íconos para usar tooltips en el navegador
+
+**Refactorización y Clean Code (Segunda iteración)**
+- **Consolidación del sistema de Notificaciones (Toasts)**: en revisión, se unificó de 6 elementos en HTML individuales a 1 único contenedor dinámico en Javascript, aplicando lo investigado sobre el principio DRY (*Don't Repeat Yourself*). Esto redujo el volumen del código y centralizó los estilos en CSS en una sola clase genérica.
+- **Separación de responsabilidades con CSS/JS**: se reemplazó el control directo de visibilidad (`.style.display`) por una clase más útil en CSS (`.hidden`) gestionada mediante `classList.toggle`/`add`/`remove` desde Javascript.
+- **Uso del DOM y rendimiento**: por optimización, se guardaron referencias constantes de elementos propensos a consultas repetitivas (como la marca `.title-colorfly` en los efectos de hover) para evitar que el navegador tenga que rastrear constantement el árbol HTML (DOM) en cada interacción.
+- **Documentación estándar (JSDoc)**: aprendiendo términos, se integró documentación estructurada con bloques comentados JSDoc en todas las funciones del script, especificando los parámetros de entrada y sus valores de retorno.
 
 ---
 
@@ -141,7 +147,7 @@ Los siguientes casos usan código más avanzado, sugerido por la IA e identifica
 Para la elaboración de estos extras, la lógica de las funcionalidades fue desarrollada con apoyo de IA, pero revisada, ajustada y corregida, tales como su comportamiento y decisiones de diseño tomadas durante el proceso:
 - Bloqueo de colores — lógica de `lockedColors[]`, `event.stopPropagation()` y diferenciación de clics en swatch vs ícono
 - Guardar paletas en localStorage — estructura de datos, límite de 5 con `unshift`, `splice` y `pop`
-- Efecto hover del título con color del swatch — `mouseover` y `mouseout`
+- Efecto hover del título en "Colorfly" con color del swatch — `mouseover` y `mouseout`
 - `@keyframes` para animaciones — se intentó implementar pero generaba conflicto con el `transition` del hover. Se descartó por criterio propio.
 
 Todo el código fue revisado y entendido antes de integrarlo al proyecto.

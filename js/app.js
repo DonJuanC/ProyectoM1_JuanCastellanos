@@ -1,13 +1,31 @@
+/**
+ * Estado global de la aplicación
+ */
 let colorCount = 6;
 let activeFormat = 'hex';
 let lockedColors = [];
 let currentPalette = [];
 
-// GENERACIÓN DE COLORES
+// ==========================================================================
+// GENERACIÓN Y CONVERSIÓN DE COLORES
+// ==========================================================================
+
+/**
+ * Convierte un número decimal (0-255) a su equivalente en hexadecimal de dos dígitos.
+ * @param {number} value - El valor decimal del canal de color (R, G o B).
+ * @returns {string} El valor hexadecimal de dos caracteres con ceros a la izquierda.
+ */
 const generateHexChannel = (value) => {
     return value.toString(16).padStart(2, '0');
 };
 
+/**
+ * Convierte valores de color HSL a su equivalente en formato hexadecimal (HEX).
+ * @param {number} h - Tono (Hue) entre 0 y 360.
+ * @param {number} s - Saturación (Saturation) entre 0 y 100.
+ * @param {number} l - Luminosidad (Lightness) entre 0 y 100.
+ * @returns {string} El color en formato hexadecimal '#RRGGBB'.
+ */
 const hslToHex = (h, s, l) => {
     s /= 100;
     l /= 100;
@@ -23,6 +41,10 @@ const hslToHex = (h, s, l) => {
     return `#${generateHexChannel(r)}${generateHexChannel(g)}${generateHexChannel(b)}`;
 };
 
+/**
+ * Genera un color aleatorio en formato Hexadecimal (HEX).
+ * @returns {object} Objeto con el valor CSS, el código HEX y el valor HSL como null.
+ */
 const generateHexColor = () => {
     const r = Math.floor(Math.random() * 256);
     const g = Math.floor(Math.random() * 256);
@@ -32,23 +54,35 @@ const generateHexColor = () => {
 
     return {
         value: hex,
-        hex: hex,
+        hex,
         hsl: null
     };
 };
 
+/**
+ * Genera un color aleatorio en formato HSL con valores armoniosos.
+ * Utiliza saturación alta (50%-100%) y luminosidad controlada (30%-70%) para garantizar
+ * que los colores resultantes sean legibles, atractivos y aptos para diseño web.
+ * @returns {object} Objeto con el valor HSL, el código HEX equivalente y el formato HSL.
+ */
 const generateHslColor = () => {
     const h = Math.floor(Math.random() * 361);
     const s = Math.floor(Math.random() * 51) + 50;
     const l = Math.floor(Math.random() * 41) + 30;
 
+    const hslString = `hsl(${h}, ${s}%, ${l}%)`;
+
     return {
-        value: `hsl(${h}, ${s}%, ${l}%)`,
+        value: hslString,
         hex: hslToHex(h, s, l),
-        hsl: `hsl(${h}, ${s}%, ${l}%)`
+        hsl: hslString
     };
 };
 
+/**
+ * Decide y genera un color aleatorio según el formato activo configurado ('hex' o 'hsl').
+ * @returns {object} Objeto de color generado.
+ */
 const generateColor = () => {
     if (activeFormat === 'hex') {
         return generateHexColor();
@@ -57,70 +91,89 @@ const generateColor = () => {
     }
 };
 
+/**
+ * Genera una paleta de colores del tamaño solicitado.
+ * Si existen colores bloqueados previamente, los mantiene en la misma posición.
+ * @param {number} count - Cantidad de colores a generar (6, 8 o 9).
+ * @returns {array} Array de objetos de color generados.
+ */
 const generatePalette = (count) => {
     const palette = [];
 
     for (let i = 0; i < count; i++) {
         if (lockedColors[i]) {
             palette.push(lockedColors[i]);
-            // Si hay color bloqueado en esta posición lo reutiliza
         } else {
             palette.push(generateColor());
-            // Si no, genera uno nuevo
         }
     }
 
     return palette;
 };
 
+// ==========================================================================
 // REFERENCIAS AL DOM
+// ==========================================================================
 const generateBtn = document.getElementById('btn-generate');
 const paletteContainer = document.getElementById('palette-container');
 const formatMessage = document.getElementById('active-format');
-const copyToast = document.getElementById('toast-copy');
-const generateToast = document.getElementById('toast-generate');
-const formatToast = document.getElementById('toast-format');
-const sizeToast = document.getElementById('toast-size');
 const sizeButtons = document.querySelectorAll('.size-btn');
 const formatRadios = document.querySelectorAll('input[name="format"]');
-// Extra - bloquear
-const lockToast = document.getElementById('toast-lock');
 const usageHint = document.querySelector('.usage-hint');
-// Extra - guardar
 const saveBar = document.getElementById('save-bar');
 const btnSave = document.getElementById('btn-save');
 const savedSection = document.getElementById('saved-section');
 const savedContainer = document.getElementById('saved-container');
-const saveToast = document.getElementById('toast-save');
 
-// FUNCIONES DE UI
-const showToast = (toastElement, text) => {
-    if (text) {
-        toastElement.textContent = text;
-    }
+// Elementos de UI unificados para optimización del DOM
+const toast = document.getElementById('toast-notification');
+const titleColorfly = document.querySelector('.title-colorfly');
 
-    toastElement.classList.add('visible');
+// ==========================================================================
+// FUNCIONES DE INTERFAZ DE USUARIO (UI)
+// ==========================================================================
 
-    setTimeout(() => {
-        toastElement.classList.remove('visible');
+let toastTimeout;
+/**
+ * Muestra una notificación temporal flotante en la interfaz.
+ * Cancela cualquier temporizador activo previo para evitar que clics rápidos cierren el toast antes de tiempo.
+ * @param {string} text - El mensaje a mostrar en la notificación.
+ */
+const showToast = (text) => {
+    toast.textContent = text;
+    toast.classList.add('visible');
+
+    clearTimeout(toastTimeout);
+
+    toastTimeout = setTimeout(() => {
+        toast.classList.remove('visible');
     }, 2000);
 };
 
+/**
+ * Copia el código hexadecimal de un color al portapapeles del sistema.
+ * @param {object} colorObj - El objeto de color a copiar.
+ */
 const copyColor = (colorObj) => {
     navigator.clipboard.writeText(colorObj.hex);
-    showToast(copyToast);
+    showToast('✓ Color copiado al portapapeles');
 };
 
+/**
+ * Crea dinámicamente y dibuja las muestras de color (swatches) en el DOM.
+ * Asigna eventos de clic para bloquear/desbloquear, copiar códigos y efectos hover sobre el título.
+ * @param {array} colors - Array de objetos de color a renderizar.
+ */
 const renderPalette = (colors) => {
     paletteContainer.innerHTML = '';
 
     formatMessage.textContent = `Paleta generada en formato ${activeFormat.toUpperCase()}`;
 
-    usageHint.style.display = 'block';
+    // Mostramos la pista de ayuda en la primera generación quitando la clase hidden
+    usageHint.classList.remove('hidden');
     usageHint.textContent = 'Haz clic en un color preferido para bloquearlo antes de generar otra paleta · Haz clic en 📋 para copiarlo';
-    // Muestra el hint después de la primera generación
 
-    colors.forEach((colorObj, index) => {
+    colors.forEach(({ value, hex, hsl }, index) => {
         const swatch = document.createElement('div');
         swatch.classList.add('swatch');
 
@@ -129,11 +182,11 @@ const renderPalette = (colors) => {
         }
 
         swatch.innerHTML = `
-            <div class="swatch-color" style="background-color: ${colorObj.value};"></div>
+            <div class="swatch-color" style="background-color: ${value};"></div>
             <div class="swatch-footer">
                 <div class="swatch-codes">
-                    <span class="swatch-hex">${colorObj.hex}</span>
-                    ${colorObj.hsl ? `<span class="swatch-hsl">${colorObj.hsl}</span>` : ''}
+                    <span class="swatch-hex">${hex}</span>
+                    ${hsl ? `<span class="swatch-hsl">${hsl}</span>` : ''}
                 </div>
                 <span class="swatch-copy-icon" title="Copiar color">
                     ${lockedColors[index] ? '🔒' : '📋'}
@@ -141,70 +194,81 @@ const renderPalette = (colors) => {
             </div>
         `;
 
-        // Clic en el swatch — bloquea o desbloquea
+        // Evento de clic en swatch: bloquear/desbloquear color
         swatch.addEventListener('click', (event) => {
+            // Si el clic fue en el icono de copiar, no ejecutamos el bloqueo
             if (event.target.classList.contains('swatch-copy-icon')) {
                 return;
-                // Si el clic fue en el ícono, no bloquea
             }
 
             if (lockedColors[index]) {
                 lockedColors[index] = null;
                 swatch.classList.remove('locked');
                 swatch.querySelector('.swatch-copy-icon').textContent = '📋';
-                showToast(lockToast, '🔓 Color desbloqueado');
+                showToast('🔓 Color desbloqueado');
             } else {
-                lockedColors[index] = colorObj;
+                lockedColors[index] = { value, hex, hsl };
                 swatch.classList.add('locked');
                 swatch.querySelector('.swatch-copy-icon').textContent = '🔒';
-                showToast(lockToast, '🔒 Color bloqueado');
+                showToast('🔒 Color bloqueado');
             }
         });
 
-        // Clic en el ícono — copia el color
+        // Evento de clic en el icono: copiar el color al portapapeles
         swatch.querySelector('.swatch-copy-icon').addEventListener('click', (event) => {
-            event.stopPropagation();
-            // Evita que el clic suba al swatch y también bloquee
-
+            event.stopPropagation(); // Evita que el clic propague y bloquee/desbloquee el color
             if (!lockedColors[index]) {
-                copyColor(colorObj);
+                copyColor({ value, hex, hsl });
             }
         });
 
+        // Eventos de hover para cambiar el color del título de la marca de la app
         swatch.addEventListener('mouseover', () => {
-            document.querySelector('.title-colorfly').style.color = colorObj.hex;
+            titleColorfly.style.color = hex;
         });
 
         swatch.addEventListener('mouseout', () => {
-            document.querySelector('.title-colorfly').style.color = '';
+            titleColorfly.style.color = '';
         });
 
         paletteContainer.appendChild(swatch);
     });
 };
 
-// Extra
-// Carga las paletas guardadas desde localStorage
+// ==========================================================================
+// PERSISTENCIA E HISTORIAL (LOCALSTORAGE)
+// ==========================================================================
+
+/**
+ * Recupera la lista de paletas guardadas en localStorage.
+ * @returns {array} Array de paletas del historial, o array vacío si no hay ninguna.
+ */
 const loadSavedPalettes = () => {
     const saved = localStorage.getItem('savedPalettes');
     return saved ? JSON.parse(saved) : [];
 };
 
-// Guarda las paletas en localStorage
+/**
+ * Guarda el array de paletas en localStorage serializado como JSON.
+ * @param {array} palettes - La lista completa de paletas a guardar.
+ */
 const savePalettes = (palettes) => {
     localStorage.setItem('savedPalettes', JSON.stringify(palettes));
 };
 
-// Renderiza las paletas guardadas en pantalla
+/**
+ * Dibuja en la interfaz la sección y los elementos del historial de paletas.
+ * Si el historial está vacío, oculta toda la sección agregando la clase hidden.
+ */
 const renderSavedPalettes = () => {
     const palettes = loadSavedPalettes();
 
     if (palettes.length === 0) {
-        savedSection.style.display = 'none';
+        savedSection.classList.add('hidden');
         return;
     }
 
-    savedSection.style.display = 'block';
+    savedSection.classList.remove('hidden');
     savedContainer.innerHTML = '';
 
     palettes.forEach((palette, paletteIndex) => {
@@ -225,22 +289,25 @@ const renderSavedPalettes = () => {
             </div>
         `;
 
-        // Eliminar paleta
+        // Evento para eliminar una paleta individual del historial
         paletteEl.querySelector('.btn-delete').addEventListener('click', (event) => {
             const index = Number(event.target.dataset.index);
             const palettes = loadSavedPalettes();
             palettes.splice(index, 1);
-            // splice elimina un elemento del array por índice
             savePalettes(palettes);
             renderSavedPalettes();
-            showToast(saveToast, '🗑 Paleta eliminada');
+            showToast('🗑 Paleta eliminada');
         });
 
         savedContainer.appendChild(paletteEl);
     });
 };
 
-// Extra - Guarda la paleta actual
+/**
+ * Guarda la paleta activa actual en el historial de localStorage.
+ * Inserta la nueva paleta al inicio y limita el almacenamiento a un máximo de 5 paletas (FIFO).
+ * @param {array} colors - Array de colores de la paleta actual.
+ */
 const saveCurrentPalette = (colors) => {
     const palettes = loadSavedPalettes();
 
@@ -255,45 +322,52 @@ const saveCurrentPalette = (colors) => {
     };
 
     palettes.unshift(newPalette);
-    // unshift agrega al inicio del array — la más reciente queda primero
 
     if (palettes.length > 5) {
         palettes.pop();
-        // pop elimina el último elemento — la más antigua se borra
     }
 
     savePalettes(palettes);
     renderSavedPalettes();
-    showToast(saveToast, '✓ Paleta guardada');
+    showToast('✓ Paleta guardada');
 };
 
-// EVENTOS
+// ==========================================================================
+// ASIGNACIÓN DE EVENTOS PRINCIPALES
+// ==========================================================================
+
+// Click en botón Generar Paleta
 generateBtn.addEventListener('click', () => {
     currentPalette = generatePalette(colorCount);
     renderPalette(currentPalette);
-    showToast(generateToast);
-    saveBar.style.display = 'flex';
+    showToast('🎨 Paleta generada');
+    saveBar.classList.remove('hidden');
 });
 
+// Click en selectores de tamaño (6, 8 o 9)
 sizeButtons.forEach((btn) => {
     btn.addEventListener('click', () => {
         sizeButtons.forEach((b) => b.classList.remove('active'));
         btn.classList.add('active');
         colorCount = Number(btn.dataset.size);
-        showToast(sizeToast, `Tamaño actualizado a ${colorCount} colores`);
+        showToast(`Tamaño actualizado a ${colorCount} colores`);
     });
 });
 
+// Click en botón Guardar Paleta
 btnSave.addEventListener('click', () => {
     saveCurrentPalette(currentPalette);
 });
 
+// Cambio de selección en los radios de formato (HEX/HSL)
 formatRadios.forEach((radio) => {
     radio.addEventListener('change', () => {
         activeFormat = radio.value;
-        showToast(formatToast, `Formato cambiado a ${activeFormat.toUpperCase()}`);
+        showToast(`Formato cambiado a ${activeFormat.toUpperCase()}`);
     });
 });
 
-// Extra - carga las paletas guardadas al iniciar la app
+// ==========================================================================
+// CARGA INICIAL
+// ==========================================================================
 renderSavedPalettes();

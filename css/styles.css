@@ -17,6 +17,10 @@
     --fuente-principal: system-ui, sans-serif;
 }
 
+.hidden {
+    display: none !important;
+}
+
 /* BASE */
 body {
     font-family: var(--fuente-principal);
@@ -113,7 +117,7 @@ body {
     border: 1px solid var(--color-borde);
     cursor: pointer;
     font-size: 0.875rem;
-    transition: background-color 0.2s ease, color 0.2s ease; /* agrega esta línea */
+    transition: background-color 0.2s ease, color 0.2s ease;
 }
 
 .size-btn:not(:first-child) {
@@ -178,7 +182,7 @@ body {
     font-size: 1rem;
     font-weight: 600;
     cursor: pointer;
-    transition: opacity 0.2s ease; /* agrega esta línea */
+    transition: opacity 0.2s ease;
 }
 
 /* FORMATO ACTIVO */
@@ -206,10 +210,6 @@ body {
     border: 1px solid var(--color-borde);
     cursor: pointer;
     transition: transform 0.2s ease;
-    animation: fadeInUp 0.4s ease forwards;
-    /* fadeInUp: cada swatch aparece subiendo suavemente
-       0.4s: dura 0.4 segundos
-       forwards: mantiene el estado final de la animación */
 }
 
 .swatch-color {
@@ -272,35 +272,8 @@ body {
     /* El toast aparece suavemente en lugar de aparecer de golpe */
 }
 
-#toast-copy {
+#toast-notification {
     bottom: 2rem;
-    background-color: var(--color-acento);
-}
-
-#toast-generate {
-    bottom: 5rem;
-    background-color: var(--color-superficie);
-    color: var(--color-texto);
-    border: 1px solid var(--color-borde);
-}
-
-#toast-format {
-    bottom: 8rem;
-    background-color: var(--color-superficie);
-    color: var(--color-texto);
-    border: 1px solid var(--color-borde);
-}
-
-#toast-size {
-    bottom: 11rem;
-    background-color: var(--color-superficie);
-    color: var(--color-texto);
-    border: 1px solid var(--color-borde);
-}
-
-/* Extra */
-#toast-lock {
-    bottom: 14rem;
     background-color: var(--color-superficie);
     color: var(--color-texto);
     border: 1px solid var(--color-borde);
@@ -435,16 +408,6 @@ body {
     height: 60px;
 }
 
-/* Toast de guardar */
-#toast-save {
-    bottom: 17rem;
-    background-color: var(--color-superficie);
-    color: var(--color-texto);
-    border: 1px solid var(--color-borde);
-}
-
-.save-bar { display: none; }
-.saved-section { display: none; }
 
 /* Animaciones */
 /* Fade in con movimiento hacia arriba — para swatches */
