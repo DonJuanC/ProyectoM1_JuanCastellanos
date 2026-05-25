@@ -42,20 +42,46 @@ const hslToHex = (h, s, l) => {
 };
 
 /**
+ * Convierte valores RGB a su equivalente en formato HSL como cadena CSS.
+ * @param {number} r - Rojo (0-255).
+ * @param {number} g - Verde (0-255).
+ * @param {number} b - Azul (0-255).
+ * @returns {string} El color en formato 'hsl(H, S%, L%)'.
+ */
+const rgbToHsl = (r, g, b) => {
+    r /= 255; g /= 255; b /= 255;
+    const max = Math.max(r, g, b);
+    const min = Math.min(r, g, b);
+    const l = (max + min) / 2;
+    let h = 0, s = 0;
+
+    if (max !== min) {
+        const d = max - min;
+        s = l > 0.5 ? d / (2 - max - min) : d / (max + min);
+        switch (max) {
+            case r: h = ((g - b) / d + (g < b ? 6 : 0)) / 6; break;
+            case g: h = ((b - r) / d + 2) / 6; break;
+            case b: h = ((r - g) / d + 4) / 6; break;
+        }
+    }
+
+    return `hsl(${Math.round(h * 360)}, ${Math.round(s * 100)}%, ${Math.round(l * 100)}%)`;
+};
+
+/**
  * Genera un color aleatorio en formato Hexadecimal (HEX).
- * @returns {object} Objeto con el valor CSS, el código HEX y el valor HSL como null.
+ * @returns {object} Objeto con el valor CSS, el código HEX y el equivalente HSL.
  */
 const generateHexColor = () => {
     const r = Math.floor(Math.random() * 256);
     const g = Math.floor(Math.random() * 256);
     const b = Math.floor(Math.random() * 256);
-
     const hex = `#${generateHexChannel(r)}${generateHexChannel(g)}${generateHexChannel(b)}`;
 
     return {
         value: hex,
         hex,
-        hsl: null
+        hsl: rgbToHsl(r, g, b)
     };
 };
 
@@ -169,9 +195,9 @@ const renderPalette = (colors) => {
 
     formatMessage.textContent = `Paleta generada en formato ${activeFormat.toUpperCase()}`;
 
-    // Mostramos la pista de ayuda en la primera generación quitando la clase hidden
+    // Mostramos la pista de ayuda en la primera generación
     usageHint.classList.remove('hidden');
-    usageHint.textContent = 'Haz clic en un color preferido para bloquearlo antes de generar otra paleta · Haz clic en 📋 para copiarlo';
+    usageHint.textContent = 'Haz clic en HEX o HSL para copiar el código · Usa 🔓 para bloquear un color y que no cambie al regenerar';
 
     colors.forEach(({ value, hex, hsl }, index) => {
         const swatch = document.createElement('div');
@@ -181,45 +207,62 @@ const renderPalette = (colors) => {
             swatch.classList.add('locked');
         }
 
-        swatch.innerHTML = `
-            <div class="swatch-color" style="background-color: ${value};"></div>
-            <div class="swatch-footer">
-                <div class="swatch-codes">
+    swatch.innerHTML = `
+        <div class="swatch-color" style="background-color: ${value};"></div>
+        <div class="swatch-footer">
+            <div class="swatch-codes">
+                <div class="code-row swatch-copy-hex" title="Copiar HEX">
+                    <span class="swatch-label">HEX</span>
                     <span class="swatch-hex">${hex}</span>
-                    ${hsl ? `<span class="swatch-hsl">${hsl}</span>` : ''}
+                    <span class="copy-indicator">📋</span>
                 </div>
-                <span class="swatch-copy-icon" title="Copiar color">
-                    ${lockedColors[index] ? '🔒' : '📋'}
-                </span>
+                <div class="code-row swatch-copy-hsl" title="Copiar HSL">
+                    <span class="swatch-label">HSL</span>
+                    <span class="swatch-hsl">${hsl}</span>
+                    <span class="copy-indicator">📋</span>
+                </div>
             </div>
-        `;
+            <button type="button" class="swatch-lock-btn" title="${lockedColors[index] ? 'Desbloquear color' : 'Bloquear color'}">
+                ${lockedColors[index] ? '🔒' : '🔓'}
+            </button>
+        </div>
+    `;
 
-        // Evento de clic en swatch: bloquear/desbloquear color
-        swatch.addEventListener('click', (event) => {
-            // Si el clic fue en el icono de copiar, no ejecutamos el bloqueo
-            if (event.target.classList.contains('swatch-copy-icon')) {
-                return;
-            }
+        const lockBtn = swatch.querySelector('.swatch-lock-btn');
+        const copyHexRow = swatch.querySelector('.swatch-copy-hex');
+        const copyHslRow = swatch.querySelector('.swatch-copy-hsl');
+
+        // Evento de clic en el botón de bloqueo/desbloqueo
+        lockBtn.addEventListener('click', (event) => {
+            event.stopPropagation();
 
             if (lockedColors[index]) {
                 lockedColors[index] = null;
                 swatch.classList.remove('locked');
-                swatch.querySelector('.swatch-copy-icon').textContent = '📋';
+                lockBtn.textContent = '🔓';
+                lockBtn.title = 'Bloquear color';
                 showToast('🔓 Color desbloqueado');
             } else {
                 lockedColors[index] = { value, hex, hsl };
                 swatch.classList.add('locked');
-                swatch.querySelector('.swatch-copy-icon').textContent = '🔒';
+                lockBtn.textContent = '🔒';
+lockBtn.title = 'Desbloquear color';
                 showToast('🔒 Color bloqueado');
             }
         });
 
-        // Evento de clic en el icono: copiar el color al portapapeles
-        swatch.querySelector('.swatch-copy-icon').addEventListener('click', (event) => {
-            event.stopPropagation(); // Evita que el clic propague y bloquee/desbloquee el color
-            if (!lockedColors[index]) {
-                copyColor({ value, hex, hsl });
-            }
+        // Evento de clic en la fila de HEX para copiar
+        copyHexRow.addEventListener('click', (event) => {
+            event.stopPropagation();
+            navigator.clipboard.writeText(hex);
+            showToast('✓ Código HEX copiado');
+        });
+
+        // Evento de clic en la fila de HSL para copiar
+        copyHslRow.addEventListener('click', (event) => {
+            event.stopPropagation();
+            navigator.clipboard.writeText(hsl);
+            showToast('✓ Código HSL copiado');
         });
 
         // Eventos de hover para cambiar el color del título de la marca de la app
@@ -371,3 +414,11 @@ formatRadios.forEach((radio) => {
 // CARGA INICIAL
 // ==========================================================================
 renderSavedPalettes();
+
+// El href del contacto se construye en JS para no exponer el email en el HTML
+const contactLink = document.getElementById('contact-mail');
+if (contactLink) {
+    const user = 'tu.nombre';    // ← Reemplaza con tu usuario de correo
+    const domain = 'gmail.com';  // ← Reemplaza con tu dominio
+    contactLink.href = `mailto:${user}@${domain}`;
+}
