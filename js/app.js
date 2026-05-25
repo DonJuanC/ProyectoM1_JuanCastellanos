@@ -117,7 +117,7 @@ const renderPalette = (colors) => {
     formatMessage.textContent = `Paleta generada en formato ${activeFormat.toUpperCase()}`;
 
     usageHint.style.display = 'block';
-    usageHint.textContent = 'Clic en un color para bloquearlo · Clic en 📋 para copiarlo';
+    usageHint.textContent = 'Haz clic en un color preferido para bloquearlo antes de generar otra paleta · Haz clic en 📋 para copiarlo';
     // Muestra el hint después de la primera generación
 
     colors.forEach((colorObj, index) => {
@@ -172,11 +172,11 @@ const renderPalette = (colors) => {
         });
 
         swatch.addEventListener('mouseover', () => {
-            document.querySelector('.site-title').style.color = colorObj.hex;
+            document.querySelector('.title-colorfly').style.color = colorObj.hex;
         });
 
         swatch.addEventListener('mouseout', () => {
-            document.querySelector('.site-title').style.color = '';
+            document.querySelector('.title-colorfly').style.color = '';
         });
 
         paletteContainer.appendChild(swatch);
@@ -273,7 +273,6 @@ generateBtn.addEventListener('click', () => {
     renderPalette(currentPalette);
     showToast(generateToast);
     saveBar.style.display = 'flex';
-    // Muestra el botón de guardar después de la primera generación
 });
 
 sizeButtons.forEach((btn) => {

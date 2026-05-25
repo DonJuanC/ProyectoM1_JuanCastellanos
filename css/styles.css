@@ -206,6 +206,10 @@ body {
     border: 1px solid var(--color-borde);
     cursor: pointer;
     transition: transform 0.2s ease;
+    animation: fadeInUp 0.4s ease forwards;
+    /* fadeInUp: cada swatch aparece subiendo suavemente
+       0.4s: dura 0.4 segundos
+       forwards: mantiene el estado final de la animación */
 }
 
 .swatch-color {
@@ -264,6 +268,8 @@ body {
 
 .toast.visible {
     display: block;
+    animation: fadeIn 0.2s ease forwards;
+    /* El toast aparece suavemente en lugar de aparecer de golpe */
 }
 
 #toast-copy {
@@ -301,7 +307,7 @@ body {
 }
 
 .usage-hint { /* Extra */
-    font-size: 0.75rem;
+    font-size: 1rem;
     color: var(--color-texto-secundario);
     margin-bottom: 1rem;
     display: none; /* oculto por defecto */
@@ -344,6 +350,8 @@ body {
     justify-content: center;
     margin-top: -0.75rem;
     margin-bottom: 1.5rem;
+    animation: slideDown 0.3s ease forwards;
+    /* El botón guardar baja suavemente cuando aparece */
 }
 
 .btn-save {
@@ -437,6 +445,41 @@ body {
 
 .save-bar { display: none; }
 .saved-section { display: none; }
+
+/* Animaciones */
+/* Fade in con movimiento hacia arriba — para swatches */
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(12px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Fade in simple — para toasts y botón guardar */
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
+}
+
+/* Slide down — para el botón guardar */
+@keyframes slideDown {
+    from {
+        opacity: 0;
+        transform: translateY(-8px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
 
 .site-footer {
     margin-top: auto;
