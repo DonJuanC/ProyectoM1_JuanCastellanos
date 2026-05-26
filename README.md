@@ -25,7 +25,7 @@ Entre las funcionalidades, el usuario puede elegir cuántos colores quiere visua
 
 ---
 
-## MVP funcional online
+## Demo en vivo
 
 🔗 https://donjuanc.github.io/ProyectoM1_JuanCastellanos/
 
@@ -73,7 +73,7 @@ Usé algunos conceptos aplicados en el diseño y en la parte técnica del desarr
 Según los conceptos aprendidos, utilicé etiquetas como `header`, `main`, `section` y `footer` en lugar de `div` para todo. Esto permite accesibilidad para diferenciar cada elemento de la página, y se hace más legible el código.
 
 **Script con `defer` en el `head`**  
-El JS se carga desde el inicio, usando el atributo `defer`. Esto le da más eficiencia que poner el script al final del body.
+El navegador descarga el JS en paralelo mientras procesa el HTML, y lo ejecuta cuando el DOM está listo.
 
 **CSS con variables**  
 Definí los colores y medidas que se repiten como variables en `:root`. Esto me permite cambiar los valores desde un solo lugar, que se pueden aplicar y actualizar en todos lados.
@@ -108,7 +108,7 @@ Cada color que se genera tiene tres propiedades: `value` (para pintar el fondo),
 - **Consolidación del sistema de Notificaciones (Toasts)**: en revisión, se unificó de 6 elementos en HTML individuales a 1 único contenedor dinámico en Javascript, aplicando lo investigado sobre el principio DRY (*Don't Repeat Yourself*). Esto redujo el volumen del código y centralizó los estilos en CSS en una sola clase genérica.
 - **Separación de responsabilidades con CSS/JS**: se reemplazó el control directo de visibilidad (`.style.display`) por una clase más útil en CSS (`.hidden`) gestionada mediante `classList.toggle`/`add`/`remove` desde Javascript.
 - **Uso del DOM y rendimiento**: por optimización, se guardaron referencias constantes de elementos propensos a consultas repetitivas (como la marca `.title-colorfly` en los efectos de hover) para evitar que el navegador tenga que rastrear constantement el árbol HTML (DOM) en cada interacción.
-- **Documentación estándar (JSDoc)**: aprendiendo términos, se integró documentación estructurada con bloques comentados JSDoc en todas las funciones del script, especificando los parámetros de entrada y sus valores de retorno.
+- **Documentación estándar (JSDoc)**: aprendiendo términos, se integró limpieza de código redundante y se simplificaron los comentarios a su mínima expresión para tener un código ligero, que sea legible y fácil de explorar y mantener.
 
 ---
 
@@ -152,7 +152,7 @@ Para la elaboración de estos extras, la lógica de las funcionalidades fue desa
 - Bloqueo de colores — lógica de `lockedColors[]`, `event.stopPropagation()` y diferenciación de clics en swatch vs ícono
 - Guardar paletas en localStorage — estructura de datos, límite de 5 con `unshift`, `splice` y `pop`
 - Efecto hover del título en "Colorfly" con color del swatch — `mouseover` y `mouseout`
-- `@keyframes` para animaciones — se intentó implementar pero generaba conflicto con el `transition` del hover. Se descartó por criterio propio.
+- Se aplicó el concepto de @keyframes para animaciones
 
 Todo el código fue revisado y entendido antes de integrarlo al proyecto.
 
@@ -161,4 +161,4 @@ Todo el código fue revisado y entendido antes de integrarlo al proyecto.
 ## Elaborado por:
 
 Juan Camilo Castellanos Uribe  
-Henry Full Stack FT75 · Mayo 2026
+Full Stack · Henry Full Stack FT75 · Mayo 2026

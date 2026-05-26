@@ -163,11 +163,13 @@ const renderPalette = (colors) => {
             showToast('✓ Código HEX copiado');
         });
 
-        copyHslRow.addEventListener('click', (event) => {
+        if (copyHslRow) {
+            copyHslRow.addEventListener('click', (event) => {
             event.stopPropagation();
             navigator.clipboard.writeText(hsl);
             showToast('✓ Código HSL copiado');
         });
+        }
 
         swatch.addEventListener('mouseover', () => {
             titleColorfly.style.color = hex;
