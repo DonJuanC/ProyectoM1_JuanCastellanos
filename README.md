@@ -19,8 +19,8 @@ Entre las funcionalidades, el usuario puede elegir cuántos colores quiere visua
 2. Luego, selecciona el formato: **HEX** o **HSL**
 3. Haz clic en **Generar paleta**
 4. Los colores aparecen en pantalla — cada uno se llama **swatch** (así se le llama a una muestra de color, es un término estándar en diseño)
-5. Puedes hacer clic en un swatch para **bloquearlo** — ese color se mantiene cuando regeneras una nueva paleta
-6. Haz clic en el ícono 📋 para **copiar el código HEX** al portapapeles
+5. Puedes hacer clic en el candado (🔓) de un swatch para **bloquearlo** — ese color se mantiene cuando regeneras una nueva paleta
+6. Haz clic en la fila del código (HEX o HSL) para **copiarlo** al portapapeles (aparecerá el ícono 📋)
 7. Haz clic en el botón **Guardar paleta** para guardarla — puedes guardar hasta 5
 
 ---
@@ -34,10 +34,14 @@ Entre las funcionalidades, el usuario puede elegir cuántos colores quiere visua
 ## Cómo ejecutar local
 
 1. Clona el repositorio usando bash:
-git clone https://github.com/DonJuanC/ProyectoM1_JuanCastellanos.git
+   ```bash
+   git clone https://github.com/DonJuanC/ProyectoM1_JuanCastellanos.git
+   ```
 
 2. Entra a la carpeta:
-cd ProyectoM1_JuanCastellanos
+   ```bash
+   cd ProyectoM1_JuanCastellanos
+   ```
 
 3. Abre el archivo `index.html` directamente en tu navegador
 
@@ -66,7 +70,7 @@ Usé algunos conceptos aplicados en el diseño y en la parte técnica del desarr
 ## Decisiones técnicas
 
 **HTML semántico**  
-Según los conceptos aprendidos, utilicé etiquetas como `header`, `main`, `section` y `footer` en lugar de `div` para todo. Esto permite accesibilidad para diferenciar cada elemento de la página, y se hace mas legible el código.
+Según los conceptos aprendidos, utilicé etiquetas como `header`, `main`, `section` y `footer` en lugar de `div` para todo. Esto permite accesibilidad para diferenciar cada elemento de la página, y se hace más legible el código.
 
 **Script con `defer` en el `head`**  
 El JS se carga desde el inicio, usando el atributo `defer`. Esto le da más eficiencia que poner el script al final del body.
@@ -90,7 +94,7 @@ Después de investigar sobre las mejores prácticas y estándares en la industri
 Adicional a lo anterior, lo cual hace parte del Principio de Responsabilidad Única (SRP), lo apliqué para entender que cada función hace una sola cosa. Los nombres describen exactamente qué hace cada función — `generateHexColor`, `renderPalette`, `showToast`, `copyColor`.
 
 **Objetos de color**
-Cada color que se genera tiene tre spropiedades: `value` (para pintar el fondo), `hex` (siempre visible en el swatch) y `hsl` (visible solo si el formato activo es HSL). Esto permite mostrar siempre el HEX sin importar el formato elegido.
+Cada color que se genera tiene tres propiedades: `value` (para pintar el fondo), `hex` y `hsl`. Esto permite mostrar siempre ambos códigos (HEX y HSL) en la tarjeta, sin importar qué formato se haya elegido al generar la paleta, ya que el sistema calcula las conversiones automáticamente.
 
 **Accesibilidad básica**  
 - `aria-label` en secciones y botones para ser usado en lectores de pantalla
@@ -111,10 +115,10 @@ Cada color que se genera tiene tre spropiedades: `value` (para pintar el fondo),
 ## Funcionalidades extra
 
 **Bloqueo de colores**  
-al hacer clic en un swatch, se bloquea ese color. Al regenerar la paleta, los colores bloqueados se mantienen en su posición. El ícono cambia entre 📋 y 🔒 según el estado. Un borde de acento indica visualmente que el color está bloqueado.
+Al hacer clic en el candado de un swatch, se bloquea ese color. Al regenerar la paleta, los colores bloqueados se mantienen en su posición. El ícono cambia entre 🔓 y 🔒 según el estado. Un borde de acento indica visualmente que el color está bloqueado.
 
 **Guardar paletas en localStorage**  
-Ls paletas se guardan en el navegador y persisten al recargar la página. El límite que establecí es 5 paletas — la más antigua se elimina automáticamente al superar ese límite. Cada paleta guardada muestra la fecha, cantidad de colores y formato, y puede eliminarse individualmente.
+Las paletas se guardan en el navegador y persisten al recargar la página. El límite que establecí es 5 paletas — la más antigua se elimina automáticamente al superar ese límite. Cada paleta guardada muestra la fecha, cantidad de colores y formato, y puede eliminarse individualmente.
 
 **Efecto hover en el título**  
 Al pasar el mouse sobre un swatch, el título "Colorfly Studio" cambia al color de ese swatch. Al salir, vuelve al color original.
@@ -129,7 +133,7 @@ Usé Claude como apoyo durante todo el desarrollo. El uso fue en varios niveles:
 Cuando algo no funcionaba, describía el problema y analizábamos la causa. Varios bugs fueron encontrados y corregidos en este proceso — errores de escritura, IDs que no coincidían, selectores mal escritos.
 
 **Nombres y organización — Clean Code**  
-La IA me complmentó sugiriendo nombres descriptivos en inglés para funciones, variables y referencias al DOM, aplicando el Principio de Responsabilidad Única desde el inicio del proyecto.
+La IA me complementó sugiriendo nombres descriptivos en inglés para funciones, variables y referencias al DOM, aplicando el Principio de Responsabilidad Única desde el inicio del proyecto.
 
 **Estructuración del CSS**  
 La IA me entregó la sugerencia de organizar el CSS en bloques con comentarios separadores, empezando por reset y variables, y siguiendo el orden de aparición en el HTML.

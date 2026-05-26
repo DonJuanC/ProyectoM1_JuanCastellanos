@@ -1,41 +1,41 @@
-/* RESET UNIVERSAL */
+/* Reset */
 *, *::before, *::after {
     margin: 0;
     padding: 0;
     box-sizing: border-box;
 }
 
-/* VARIABLES */
+/* Variables */
 :root {
-    --color-fondo: #0f0f13;
-    --color-superficie: #1a1a24;
-    --color-borde: #2e2e3e;
-    --color-acento: #e0ff4f;
-    --color-texto: #f0f0f0;
-    --color-texto-secundario: #888;
-    --radio-borde: 8px;
-    --fuente-principal: system-ui, sans-serif;
+    --bg-color: #0f0f13;
+    --surface-color: #1a1a24;
+    --border-color: #2e2e3e;
+    --accent-color: #e0ff4f;
+    --text-color: #f0f0f0;
+    --text-secondary-color: #888;
+    --border-radius: 8px;
+    --main-font: system-ui, sans-serif;
 }
 
 .hidden {
     display: none !important;
 }
 
-/* BASE */
+/* Base */
 body {
-    font-family: var(--fuente-principal);
-    background-color: var(--color-fondo);
-    color: var(--color-texto);
+    font-family: var(--main-font);
+    background-color: var(--bg-color);
+    color: var(--text-color);
     min-height: 100vh;
     display: flex;
     flex-direction: column;
     overflow-x: hidden;
 }
 
-/* HEADER */
+/* Header */
 .site-header {
     padding: 1.5rem 2rem;
-    border-bottom: 1px solid var(--color-borde);
+    border-bottom: 1px solid var(--border-color);
 }
 
 .site-brand {
@@ -54,7 +54,7 @@ body {
 .site-title {
     font-size: 2rem;
     font-weight: 700;
-    color: var(--color-texto);
+    color: var(--text-color);
 }
 
 .site-logo {
@@ -64,11 +64,11 @@ body {
 
 .site-subtitle {
     font-size: 0.8rem;
-    color: var(--color-texto-secundario);
+    color: var(--text-secondary-color);
     margin-top: 0.25rem;
 }
 
-/* MAIN */
+/* Main */
 .main-content {
     flex: 1;
     padding: 2rem;
@@ -76,7 +76,7 @@ body {
     margin: 0 auto;
 }
 
-/* CONTROLES */
+/* Controles */
 .controls {
     display: flex;
     flex-direction: row;
@@ -85,9 +85,9 @@ body {
     gap: 1.5rem;
     margin-bottom: 1.5rem;
     padding: 1.5rem;
-    background-color: var(--color-superficie);
-    border-radius: var(--radio-borde);
-    border: 1px solid var(--color-borde);
+    background-color: var(--surface-color);
+    border-radius: var(--border-radius);
+    border: 1px solid var(--border-color);
     width: fit-content;
     margin-left: auto;
     margin-right: auto;
@@ -101,10 +101,10 @@ body {
 
 .control-label {
     font-size: 0.75rem;
-    color: var(--color-texto-secundario);
+    color: var(--text-secondary-color);
 }
 
-/* SELECTOR DE TAMAÑO */
+/* Selector de tamaño */
 .size-selector {
     display: flex;
     flex-direction: row;
@@ -113,8 +113,8 @@ body {
 .size-btn {
     padding: 0.5rem 1rem;
     background-color: transparent;
-    color: var(--color-texto-secundario);
-    border: 1px solid var(--color-borde);
+    color: var(--text-secondary-color);
+    border: 1px solid var(--border-color);
     cursor: pointer;
     font-size: 0.875rem;
     transition: background-color 0.2s ease, color 0.2s ease;
@@ -125,21 +125,21 @@ body {
 }
 
 .size-btn:first-child {
-    border-radius: var(--radio-borde) 0 0 var(--radio-borde);
+    border-radius: var(--border-radius) 0 0 var(--border-radius);
 }
 
 .size-btn:last-child {
-    border-radius: 0 var(--radio-borde) var(--radio-borde) 0;
+    border-radius: 0 var(--border-radius) var(--border-radius) 0;
 }
 
 .size-btn.active {
-    background-color: var(--color-acento);
+    background-color: var(--accent-color);
     color: #0f0f13;
-    border-color: var(--color-acento);
+    border-color: var(--accent-color);
     font-weight: 600;
 }
 
-/* SELECTOR DE FORMATO */
+/* Selector de formato */
 .format-selector {
     display: flex;
     gap: 0.5rem;
@@ -150,18 +150,18 @@ body {
     align-items: center;
     gap: 0.375rem;
     padding: 0.5rem 1rem;
-    border: 1px solid var(--color-borde);
-    border-radius: var(--radio-borde);
+    border: 1px solid var(--border-color);
+    border-radius: var(--border-radius);
     cursor: pointer;
     font-size: 0.875rem;
-    color: var(--color-texto-secundario);
+    color: var(--text-secondary-color);
     transition: background-color 0.2s ease, color 0.2s ease;         
 }
 
 .format-selector label:has(input:checked) {
-    background-color: var(--color-acento);
+    background-color: var(--accent-color);
     color: #0f0f13;
-    border-color: var(--color-acento);
+    border-color: var(--accent-color);
     font-weight: 600;
 }
 
@@ -172,23 +172,23 @@ body {
     height: 0;
 }
 
-/* BOTÓN PRINCIPAL */
+/* Botón principal */
 .btn-generate {
     padding: 0.625rem 1.75rem;
-    background-color: var(--color-acento);
+    background-color: var(--accent-color);
     color: #0f0f13;
     border: none;
-    border-radius: var(--radio-borde);
+    border-radius: var(--border-radius);
     font-size: 1rem;
     font-weight: 600;
     cursor: pointer;
-    transition: opacity 0.2s ease;
+    transition: opacity 0.2s ease, transform 0.1s ease;
 }
 
-/* FORMATO ACTIVO */
+/* Formato activo */
 .active-format {
     font-size: 1rem;
-    color: var(--color-texto-secundario);
+    color: var(--text-secondary-color);
     margin-bottom: 1rem;
     min-height: 1rem;
     text-align: center;
@@ -198,7 +198,7 @@ body {
     width: 100%;
 }
 
-/* GRID DE SWATCHES */
+/* Grid de Swatches */
 .palette-container {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
@@ -210,12 +210,17 @@ body {
 }
 
 .swatch {
-    border-radius: var(--radio-borde);
+    border-radius: var(--border-radius);
     overflow: hidden;
-    border: 1px solid var(--color-borde);
+    border: 1px solid var(--border-color);
     cursor: pointer;
-    transition: transform 0.2s ease;
     position: relative;
+    transition: 
+        top 0.3s cubic-bezier(0.25, 0.8, 0.25, 1), 
+        box-shadow 0.3s cubic-bezier(0.25, 0.8, 0.25, 1),
+        filter 0.3s ease;
+    top: 0;    
+    animation: fadeInUp 0.4s ease-out both;
 }
 
 .swatch-color {
@@ -234,24 +239,22 @@ body {
     flex-direction: column;
     justify-content: space-between;
     background: linear-gradient(
-        to bottom
-        rgba(0,0,0,0.15) 0%,
-         transparent 30%,
-         transparent 60%,
-         rgba(0,0,0,0.4) 100%   
-         );
-         /* Se genera un gradiente sutil arriba en ícono y más fuerte abajo para texto */
-    }
+        to bottom,
+        rgba(0, 0, 0, 0.15) 0%,
+        transparent 30%,
+        transparent 60%,
+        rgba(0, 0, 0, 0.4) 100%
+    );
+}
 
 .swatch-codes {
     display: flex;
     flex-direction: column;
     gap: 0.2rem;
-    /* Se posiciona abajo a la izquierda */
 }
 
 .swatch-label {
-    font-size: 0.55rem;
+    font-size: 0.65rem;
     font-family: monospace;
     font-weight: 700;
     letter-spacing: 0.05rem;
@@ -259,7 +262,7 @@ body {
 }
 
 .swatch-hex {
-    font-size: 0.8rem;
+    font-size: 0.9rem;
     font-family: monospace;
     font-weight: 600;
     white-space: nowrap;
@@ -268,12 +271,32 @@ body {
 }
 
 .swatch-hsl {
-    font-size: 0.6rem;
+    font-size: 0.7rem;
     font-family: monospace;
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
     opacity: 0.85;
+}
+
+.swatch-lock-btn {
+    background: rgba(0,0,0,0.3);
+    border: 1px solid rgba(255,255,255,0.2);
+    border-radius: var(--border-radius);
+    font-size: 0.9rem;
+    cursor: pointer;
+    padding: 0.25rem 0.35rem;
+    transition: background-color 0.2s ease;
+    line-height: 1;
+    align-self: flex-end;
+}
+
+.swatch-lock-btn:hover {
+    background-color: rgba(0,0,0,0.5);
+}
+
+.swatch.locked {
+    border: 2px solid var(--accent-color);
 }
 
 .code-row {
@@ -289,45 +312,23 @@ body {
 }
 
 .copy-indicator {
-    font-size: 0.65rem;
+    font-size: 0.8rem;
     opacity: 0;
     transition: opacity 0.2s ease;
 }
 
 .code-row:hover .copy-indicator {
     opacity: 1;
-    /* El ícono de copiar solo aparece cuando se hace hover */
 }
 
-.swatch-lock-btn {
-    background: rgba(0,0,0,0.3);
-    border: 1px solid rgba(255,255,255,0.2);
-    border-radius: var(--radio-borde);
-    font-size: 0.9rem;
-    cursor: pointer;
-    padding: 0.25rem 0.35rem;
-    transition: background-color 0.2s ease;
-    line-height: 1;
-    align-self: flex-end;
-}
-
-.swatch-lock-btn:hover {
-    background-color: rgba(0,0,0,0.5);
-}
-
-/* Extra */
-.swatch.locked {
-    border: 2px solid var(--color-acento);
-}
-
-/* TOASTS Y HINTS */
+/* Toast y pistas de uso */
 .toast {
     display: none;
     position: fixed;
     left: 50%;
     transform: translateX(-50%);
     padding: 0.75rem 1.5rem;
-    border-radius: var(--radio-borde);
+    border-radius: var(--border-radius);
     font-size: 0.875rem;
     font-weight: 600;
     color: #0f0f13;
@@ -335,79 +336,85 @@ body {
 
 .toast.visible {
     display: block;
-    animation: fadeIn 0.2s ease forwards;
-    /* El toast aparece suavemente en lugar de aparecer de golpe */
+    animation: slideUpToast 0.35s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
 }
 
 #toast-notification {
     bottom: 2rem;
-    background-color: var(--color-superficie);
-    color: var(--color-texto);
-    border: 1px solid var(--color-borde);
+    background-color: var(--surface-color);
+    color: var(--text-color);
+    border: 1px solid var(--border-color);
 }
 
 .usage-hint {
     font-size: 0.85rem;
-    color: var(--color-texto);
-    background-color: var(--color-superficie);
-    border-left: 3px solid var(--color-acento);
+    color: var(--text-color);
+    background-color: var(--surface-color);
+    border-left: 3px solid var(--accent-color);
     padding: 0.75rem 1rem;
     margin-top: 1rem;
     margin-bottom: 1.5rem;
-    border-radius: var(--radio-borde);
+    border-radius: var(--border-radius);
     text-align: center;
     max-width: 650px;
     margin-left: auto;
     margin-right: auto;
 }
 
+/* Efectos de interacción (Hover / Active / Focus) */
 .size-btn:hover:not(.active) {
-    background-color: var(--color-borde);
-    color: var(--color-texto);
+    background-color: var(--border-color);
+    color: var(--text-color);
 }
 
 .btn-generate:hover {
     opacity: 0.85;
 }
 
+.btn-generate:active {
+    transform: scale(0.95); 
+}
+
 .swatch:hover {
-    transform: translateY(-4px);
+    top: -6px;
+    filter: brightness(1.05);
+    box-shadow: 
+        0 12px 24px rgba(0, 0, 0, 0.4), 
+        0 4px 8px rgba(0, 0, 0, 0.2);
 }
 
 .format-selector label:hover:not(:has(input:checked)) {
-    background-color: var(--color-borde);
-    color: var(--color-texto);
+    background-color: var(--border-color);
+    color: var(--text-color);
 }
 
-/* Foco visible — accesibilidad para navegación cuando se navega con teclado */
 .size-btn:focus-visible,
 .btn-generate:focus-visible,
 .swatch:focus-visible {
-    outline: 2px solid var(--color-acento);
+    outline: 2px solid var(--accent-color);
     outline-offset: 2px;
 }
 
 .format-selector label:focus-within {
-    outline: 2px solid var(--color-acento);
+    outline: 2px solid var(--accent-color);
     outline-offset: 2px;
 }
 
-/* EXTRA - BARRA DE GUARDAR */
+/* Guardar e historial */
 .save-bar {
     display: flex;
     justify-content: center;
     margin-top: -0.75rem;
     margin-bottom: 1.5rem;
     animation: slideDown 0.3s ease forwards;
-    /* El botón guardar baja suavemente cuando aparece */
 }
 
 .btn-save {
     padding: 0.5rem 1.75rem;
-    background-color: var(--color-superficie);
-    color: var(--color-texto-secundario);
-    border: 1px solid var(--color-borde);
-    border-radius: 0 0 var(--radio-borde) var(--radio-borde);
+    background-color: var(--surface-color);
+    color: var(--text-secondary-color);
+    border: 1px solid var(--border-color);
+    border-radius: 0 0 var(--border-radius) var(--border-radius);
     font-size: 0.875rem;
     font-weight: 600;
     cursor: pointer;
@@ -415,11 +422,10 @@ body {
 }
 
 .btn-save:hover {
-    background-color: var(--color-borde);
-    color: var(--color-texto);
+    background-color: var(--border-color);
+    color: var(--text-color);
 }
 
-/* EXTRA - SECCIÓN DE PALETAS GUARDADAS */
 .saved-section {
     margin-top: 3rem;
     padding: 0 2rem;
@@ -427,7 +433,7 @@ body {
 
 .saved-title {
     font-size: 0.875rem;
-    color: var(--color-texto-secundario);
+    color: var(--text-secondary-color);
     margin-bottom: 1.5rem;
     text-transform: uppercase;
     letter-spacing: 0.05em;
@@ -439,10 +445,9 @@ body {
     gap: 1.5rem;
 }
 
-/* Cada paleta guardada */
 .saved-palette {
-    border: 1px solid var(--color-borde);
-    border-radius: var(--radio-borde);
+    border: 1px solid var(--border-color);
+    border-radius: var(--border-radius);
     overflow: hidden;
 }
 
@@ -451,22 +456,22 @@ body {
     align-items: center;
     justify-content: space-between;
     padding: 0.5rem 1rem;
-    background-color: var(--color-superficie);
+    background-color: var(--surface-color);
 }
 
 .saved-palette-date {
     font-size: 0.75rem;
-    color: var(--color-texto-secundario);
+    color: var(--text-secondary-color);
 }
 
 .btn-delete {
     background: transparent;
     border: none;
-    color: var(--color-texto-secundario);
+    color: var(--text-secondary-color);
     cursor: pointer;
     font-size: 0.75rem;
     padding: 0.25rem 0.5rem;
-    border-radius: var(--radio-borde);
+    border-radius: var(--border-radius);
     transition: color 0.2s ease;
 }
 
@@ -483,9 +488,7 @@ body {
     height: 60px;
 }
 
-
-/* Animaciones */
-/* Fade in con movimiento hacia arriba — para swatches */
+/* Animaciones de Keyframes */
 @keyframes fadeInUp {
     from {
         opacity: 0;
@@ -497,17 +500,17 @@ body {
     }
 }
 
-/* Fade in simple — para toasts y botón guardar */
-@keyframes fadeIn {
+@keyframes slideUpToast {
     from {
         opacity: 0;
+        transform: translate(-50%, 20px);
     }
     to {
         opacity: 1;
+        transform: translate(-50%, 0);     
     }
 }
 
-/* Slide down — para el botón guardar */
 @keyframes slideDown {
     from {
         opacity: 0;
@@ -519,10 +522,11 @@ body {
     }
 }
 
+/* Footer */
 .site-footer {
     margin-top: auto;
     padding: 2rem;
-    border-top: 1px solid var(--color-borde);
+    border-top: 1px solid var(--border-color);
     text-align: center;
     display: flex;
     flex-direction: column;
@@ -532,7 +536,7 @@ body {
 
 .footer-disclaimer {
     font-size: 0.8rem;
-    color: var(--color-texto-secundario);
+    color: var(--text-secondary-color);
 }
 
 .footer-socials {
@@ -541,7 +545,7 @@ body {
 }
 
 .footer-socials a {
-    color: var(--color-texto);
+    color: var(--text-color);
     text-decoration: none;
     font-size: 0.9rem;
     font-weight: 500;
@@ -552,5 +556,5 @@ body {
 }
 
 .footer-socials a:hover {
-    color: var(--color-acento);
+    color: var(--accent-color);
 }
