@@ -47,6 +47,22 @@ Entre las funcionalidades, el usuario puede elegir cuántos colores quiere visua
 
 ---
 
+## Cómo desplegar en GitHub Pages
+
+1. Asegúrate de que el repositorio sea **público** en GitHub
+2. Entra a **Settings** del repositorio
+3. En el menú izquierdo selecciona **Pages**
+4. En **Branch** selecciona `main` y carpeta `/ (root)`
+5. Haz clic en **Save**
+6. Espera 1-2 minutos — GitHub genera la URL automáticamente
+
+La URL tendrá este formato:
+https://tu-usuario.github.io/nombre-del-repositorio/
+
+Para este proyecto: https://donjuanc.github.io/ProyectoM1_JuanCastellanos/
+
+---
+
 ## Por qué esta estructura visual
 
 El proceso inicial fue de planeación de diseño: dibujar y ver cómo se vería aplicado este proyecto según mis preferencias y teniendo una experiencia de usuario fluida pero accesible.
