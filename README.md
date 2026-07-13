@@ -27,7 +27,7 @@ Entre las funcionalidades, el usuario puede elegir cuántos colores quiere visua
 
 ## Demo en vivo
 
-🔗 https://donjuanc.github.io/ProyectoM1_JuanCastellanos/
+🔗 https://donjuanc.github.io/ColorFly_Studio/
 
 ---
 
