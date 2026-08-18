@@ -89,12 +89,46 @@ const showToast = (text) => {
     toastTimeout = setTimeout(() => toast.classList.remove('visible'), 2000);
 };
 
+// Luminancia relativa (WCAG) de un color, usada para calcular contraste real
+const relativeLuminance = ([r, g, b]) => {
+    const channel = (v) => {
+        v /= 255;
+        return v <= 0.03928 ? v / 12.92 : Math.pow((v + 0.055) / 1.055, 2.4);
+    };
+    return 0.2126 * channel(r) + 0.7152 * channel(g) + 0.0722 * channel(b);
+};
+
+const contrastRatio = (rgb1, rgb2) => {
+    const l1 = relativeLuminance(rgb1) + 0.05;
+    const l2 = relativeLuminance(rgb2) + 0.05;
+    return l1 > l2 ? l1 / l2 : l2 / l1;
+};
+
+// El texto del swatch se apoya sobre el degradado oscuro del footer (rgba(0,0,0,0.6) en la base),
+// así que el contraste se calcula contra ese fondo ya oscurecido — no contra el color crudo —
+// y se elige el color de texto (casi negro o casi blanco) que da MEJOR contraste real.
+// Esto garantiza WCAG AA (4.5:1) para cualquier color que el generador produzca.
 const getTextColor = (hex) => {
     const r = parseInt(hex.slice(1, 3), 16);
     const g = parseInt(hex.slice(3, 5), 16);
     const b = parseInt(hex.slice(5, 7), 16);
-    const luminance = (0.299 * r + 0.587 * g + 0.114 * b) / 255;
-    return luminance > 0.5 ? '#0f0f13' : '#f0f0f0';
+
+    const overlayAlpha = 0.6;
+    const renderedBg = [r * (1 - overlayAlpha), g * (1 - overlayAlpha), b * (1 - overlayAlpha)];
+
+    const darkText = [15, 15, 19];
+    const lightText = [240, 240, 240];
+
+    return contrastRatio(darkText, renderedBg) > contrastRatio(lightText, renderedBg)
+        ? '#0f0f13'
+        : '#f0f0f0';
+};
+
+// Copia un código de color al portapapeles, con aviso si el navegador lo bloquea
+const copyToClipboard = (text, successMessage) => {
+    navigator.clipboard.writeText(text)
+        .then(() => showToast(successMessage))
+        .catch(() => showToast('⚠ No se pudo copiar el código'));
 };
 
 const renderPalette = (colors) => {
@@ -120,16 +154,16 @@ const renderPalette = (colors) => {
                     ${lockedColors[index] ? '🔒' : '🔓'}
                 </button>
                 <div class="swatch-codes">
-                    <div class="code-row swatch-copy-hex" title="Copiar HEX">
+                    <button type="button" class="code-row swatch-copy-hex" title="Copiar HEX" aria-label="Copiar código HEX ${hex}" style="color: ${textColor};">
                         <span class="swatch-label" style="color: ${textColor};">HEX</span>
                         <span class="copy-indicator">📋</span>
-                    </div>
+                    </button>
                     <span class="swatch-hex" style="color: ${textColor};">${hex}</span>
                     ${hsl ? `
-                    <div class="code-row swatch-copy-hsl" title="Copiar HSL">
+                    <button type="button" class="code-row swatch-copy-hsl" title="Copiar HSL" aria-label="Copiar código HSL ${hsl}" style="color: ${textColor};">
                         <span class="swatch-label" style="color: ${textColor};">HSL</span>
                         <span class="copy-indicator">📋</span>
-                    </div>
+                    </button>
                     <span class="swatch-hsl" style="color: ${textColor};">${hsl}</span>
                     ` : ''}
                 </div>
@@ -159,16 +193,14 @@ const renderPalette = (colors) => {
 
         copyHexRow.addEventListener('click', (event) => {
             event.stopPropagation();
-            navigator.clipboard.writeText(hex);
-            showToast('✓ Código HEX copiado');
+            copyToClipboard(hex, '✓ Código HEX copiado');
         });
 
         if (copyHslRow) {
             copyHslRow.addEventListener('click', (event) => {
-            event.stopPropagation();
-            navigator.clipboard.writeText(hsl);
-            showToast('✓ Código HSL copiado');
-        });
+                event.stopPropagation();
+                copyToClipboard(hsl, '✓ Código HSL copiado');
+            });
         }
 
         swatch.addEventListener('mouseover', () => {
@@ -208,21 +240,37 @@ const renderSavedPalettes = () => {
         paletteEl.classList.add('saved-palette');
 
         const colorsHTML = palette.colors.map(colorObj => `
-            <div class="saved-swatch" style="background-color: ${colorObj.value};" title="${colorObj.hex}"></div>
+            <button type="button" class="saved-swatch" style="background-color: ${colorObj.value};" data-hex="${colorObj.hex}" title="Copiar ${colorObj.hex}" aria-label="Copiar color ${colorObj.hex}"></button>
         `).join('');
 
         paletteEl.innerHTML = `
             <div class="saved-palette-header">
                 <span class="saved-palette-date">${palette.date} · ${palette.colors.length} colores · ${palette.format.toUpperCase()}</span>
-                <button type="button" class="btn-delete" data-index="${paletteIndex}" title="Eliminar paleta">✕</button>
+                <div class="saved-palette-actions">
+                    <button type="button" class="btn-load" data-index="${paletteIndex}" title="Cargar esta paleta en el editor" aria-label="Cargar esta paleta en el editor">↺</button>
+                    <button type="button" class="btn-delete" data-index="${paletteIndex}" title="Eliminar paleta" aria-label="Eliminar paleta">✕</button>
+                </div>
             </div>
             <div class="saved-palette-colors">
                 ${colorsHTML}
             </div>
         `;
 
+        paletteEl.querySelectorAll('.saved-swatch').forEach((swatchBtn) => {
+            swatchBtn.addEventListener('click', () => {
+                copyToClipboard(swatchBtn.dataset.hex, `✓ ${swatchBtn.dataset.hex} copiado`);
+            });
+        });
+
+        paletteEl.querySelector('.btn-load').addEventListener('click', (event) => {
+            const index = Number(event.currentTarget.dataset.index);
+            const palettes = loadSavedPalettes();
+            if (palettes[index]) loadPaletteToEditor(palettes[index]);
+        });
+
         paletteEl.querySelector('.btn-delete').addEventListener('click', (event) => {
-            const index = Number(event.target.dataset.index);
+            const index = Number(event.currentTarget.dataset.index);
+            if (!confirm('¿Eliminar esta paleta guardada?')) return;
             const palettes = loadSavedPalettes();
             palettes.splice(index, 1);
             savePalettes(palettes);
@@ -234,8 +282,38 @@ const renderSavedPalettes = () => {
     });
 };
 
+// Restaura una paleta guardada como paleta activa para seguir editándola
+const loadPaletteToEditor = (palette) => {
+    currentPalette = palette.colors.map((colorObj) => ({ ...colorObj }));
+    colorCount = palette.colors.length;
+    activeFormat = palette.format;
+    lockedColors = [];
+
+    sizeButtons.forEach((btn) => {
+        btn.classList.toggle('active', Number(btn.dataset.size) === colorCount);
+    });
+    formatRadios.forEach((radio) => {
+        radio.checked = radio.value === activeFormat;
+    });
+
+    renderPalette(currentPalette);
+    saveBar.classList.remove('hidden');
+    showToast('↺ Paleta cargada en el editor');
+    paletteContainer.scrollIntoView({ behavior: 'smooth', block: 'start' });
+};
+
 const saveCurrentPalette = (colors) => {
     const palettes = loadSavedPalettes();
+
+    const isDuplicate = palettes.some((palette) =>
+        palette.colors.length === colors.length &&
+        palette.colors.every((colorObj, index) => colorObj.hex === colors[index].hex)
+    );
+    if (isDuplicate) {
+        showToast('ℹ Esta paleta ya está guardada');
+        return;
+    }
+
     const newPalette = {
         colors: [...colors],
         format: activeFormat,
@@ -247,10 +325,12 @@ const saveCurrentPalette = (colors) => {
     };
 
     palettes.unshift(newPalette);
-    if (palettes.length > 5) palettes.pop();
+    const limitReached = palettes.length > 5;
+    if (limitReached) palettes.pop();
+
     savePalettes(palettes);
     renderSavedPalettes();
-    showToast('✓ Paleta guardada');
+    showToast(limitReached ? '✓ Paleta guardada · se eliminó la más antigua (máx. 5)' : '✓ Paleta guardada');
 };
 
 // Eventos de controles
